@@ -1,8 +1,11 @@
 ﻿namespace DoQCI.Controllers;
 
+using DoQCI.Helpers;
+using DoQCI.Models.Requests;
+using DoQCI.Models.Responses;
 using DoQCI.Services;
 using Microsoft.AspNetCore.Mvc;
-using DoQCI.Models.Requests;
+using PdfSharpCore.Pdf.IO;
 
 [ApiController]
 [Route("api/pdf")]
@@ -47,6 +50,41 @@ public class PdfController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("upload-merge")]
+    [RequestSizeLimit(15728640)]
+    public async Task<IActionResult> UploadMerge([FromForm] MergeUploadRequest request)
+    {
+        if (request.Files == null || request.Files.Count < 2)
+            return BadRequest("At least two files are required");
+
+        var response = await _pdfService.UploadMergeAsync(request);
+
+        return Ok(response);
+    }
+
+    [HttpPost("merge")]
+    public async Task<IActionResult> MergeAsync([FromBody] MergeRequest request)
+    {
+        if (string.IsNullOrEmpty(request.MergeId))
+            return BadRequest("MergeId is required");
+
+        if (request.Pages == null || request.Pages.Count == 0)
+            return BadRequest("Pages are required");
+
+        var mergeFolder = Path.Combine(FileHelper.MergeFolder, request.MergeId);
+
+        if (!Directory.Exists(mergeFolder))
+            return BadRequest("Invalid MergeId");
+
+        var mergeDto = new MergeRequest
+        {
+            MergeId = request.MergeId,
+            Pages = request.Pages
+        };
+        var response = await _pdfService.MergeAsync(mergeDto);
+        // Call service to perform merge based on the provided page order
+        return Ok(response);
+    }
 
 
 }

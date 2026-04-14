@@ -1,6 +1,6 @@
-﻿namespace DoQCI.Models.Requests
+﻿namespace DoQCI.Models.Requests;
+
+public class MergeUploadRequest
 {
-    public class MergeUploadRequest
-    {
-    }
+    public List<IFormFile> Files { get; set; } = new();
 }

@@ -10,6 +10,8 @@ public static class FileHelper
 
     public static string DownloadsFolder =>
         Path.Combine(TempFolder, "downloads");
+    public static string MergeFolder =>
+        Path.Combine(TempFolder, "merge");
 
     public static void EnsureTempFolders()
     {
@@ -21,6 +23,9 @@ public static class FileHelper
 
         if (!Directory.Exists(DownloadsFolder))
             Directory.CreateDirectory(DownloadsFolder);
+
+        if (!Directory.Exists(MergeFolder))
+            Directory.CreateDirectory(MergeFolder);
     }
 
     public static string GenerateUploadFileName(string originalName)

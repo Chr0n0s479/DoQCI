@@ -70,5 +70,94 @@ public class PdfService : IPdfService
     }
 
 
+    public async Task<MergeUploadResponse> UploadMergeAsync(MergeUploadRequest request)
+    {
+        var mergeId = Guid.NewGuid().ToString();
+
+        var mergeFolder = Path.Combine(FileHelper.MergeFolder, mergeId);
+
+        if (!Directory.Exists(mergeFolder))
+            Directory.CreateDirectory(mergeFolder);
+
+        var response = new MergeUploadResponse
+        {
+            MergeId = mergeId
+        };
+
+        int index = 0;
+
+        foreach (var file in request.Files)
+        {
+            var fileName = $"file_{index}.pdf";
+            var filePath = Path.Combine(mergeFolder, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var doc = PdfReader.Open(filePath, PdfDocumentOpenMode.Import);
+
+            response.Files.Add(new FileInfoResponse
+            {
+                FileName = fileName,
+                PageCount = doc.PageCount
+            });
+
+            index++;
+        }
+
+        return response;
+    }
+    public async Task<FileDownloadResponse> MergeAsync(MergeRequest mergeRequest)
+    {
+        if (mergeRequest.Pages == null || mergeRequest.Pages.Count == 0)
+            throw new Exception("No pages to merge");
+
+        if (string.IsNullOrEmpty(mergeRequest.MergeId))
+            throw new Exception("MergeId is required");
+
+        var mergeFolder = Path.Combine(FileHelper.MergeFolder, mergeRequest.MergeId);
+
+        if (!Directory.Exists(mergeFolder))
+            throw new Exception("Merge folder not found");
+
+        var outputDocument = new PdfDocument();
+
+        var openedDocuments = new Dictionary<string, PdfDocument>();
+
+        foreach (var pageRequest in mergeRequest.Pages)
+        {
+            if (!openedDocuments.TryGetValue(pageRequest.FileIndex, out var doc))
+            {
+                var fileName = $"file_{pageRequest.FileIndex}.pdf";
+                var filePath = Path.Combine(mergeFolder, fileName);
+
+                if (!File.Exists(filePath))
+                    throw new Exception($"File {fileName} not found");
+
+                doc = PdfReader.Open(filePath, PdfDocumentOpenMode.Import);
+                openedDocuments.Add(pageRequest.FileIndex, doc);
+            }
+
+            if (pageRequest.Page < 1 || pageRequest.Page > doc.PageCount)
+                continue;
+
+            outputDocument.AddPage(doc.Pages[pageRequest.Page - 1]);
+        }
+
+        var outputName = FileHelper.GenerateDownloadFileName(mergeRequest.MergeId);
+        var outputPath = Path.Combine(FileHelper.DownloadsFolder, outputName);
+
+        outputDocument.Save(outputPath);
+
+        return new FileDownloadResponse
+        {
+            FileName = outputName,
+            Path = outputPath
+        };
+    }
+
+
 
 }
