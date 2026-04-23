@@ -1,6 +1,7 @@
 import fitz
 import os
 
+
 def generate_thumbnails(pdf_path: str, output_folder: str, zoom: float = 0.2):
 
     os.makedirs(output_folder, exist_ok=True)
@@ -21,8 +22,8 @@ def generate_thumbnails(pdf_path: str, output_folder: str, zoom: float = 0.2):
         pix.save(file_path)
 
         thumbnails.append({
-            "page": page_number + 1,
-            "file": file_name
+            "PageNumber": page_number + 1,
+            "Thumbnail": file_name
         })
 
     doc.close()

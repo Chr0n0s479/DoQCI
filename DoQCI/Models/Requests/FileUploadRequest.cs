@@ -1,6 +1,7 @@
 ﻿namespace DoQCI.Models.Requests;
 
+
 public class FileUploadRequest
 {
-    public IFormFile File { get; set; } = null!;
+    public List<IFormFile> Files { get; set; } = new();
 }

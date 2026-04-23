@@ -3,15 +3,22 @@ from fastapi.responses import FileResponse
 import os
 import shutil
 import uuid
+from pydantic import BaseModel
+
 
 from services.compress import compress_pdf
 from services.thumbnails import generate_thumbnails
 from services.ocr import ocr_pdf
 
 app = FastAPI()
+STORAGE_ROOT = os.getenv("STORAGE_ROOT", "C:/DoQCI/storage")
 
 TEMP_FOLDER = "temp"
 os.makedirs(TEMP_FOLDER, exist_ok=True)
+
+class ThumbnailRequest(BaseModel):
+    jobId: str
+    fileIndex: int
 
 
 @app.get("/health")
@@ -38,22 +45,34 @@ async def compress(file: UploadFile = File(...)):
         filename="compressed.pdf"
     )
 
-@app.post("/thumbnails")
-async def thumbnails(file: UploadFile = File(...)):
 
-    input_name = f"{uuid.uuid4()}.pdf"
-    pdf_path = os.path.join(TEMP_FOLDER, input_name)
+@app.post("/generate-thumbnails")
+async def generate_thumbnails_endpoint(request: ThumbnailRequest):
 
-    with open(pdf_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    job_id = request.jobId
+    file_index = request.fileIndex
 
-    thumbs_folder = os.path.join(TEMP_FOLDER, f"{input_name}_thumbs")
+    pdf_path = os.path.join(
+        STORAGE_ROOT,
+        "temp",
+        "jobs",
+        job_id,
+        "files",
+        f"file_{file_index}.pdf"
+    )
+
+    thumbs_folder = os.path.join(
+        STORAGE_ROOT,
+        "temp",
+        "jobs",
+        job_id,
+        "thumbs",
+        f"file_{file_index}"
+    )
 
     thumbs = generate_thumbnails(pdf_path, thumbs_folder)
 
-    return {
-        "pages": thumbs
-    }
+    return thumbs
 
 @app.post("/ocr")
 async def ocr(file: UploadFile = File(...)):

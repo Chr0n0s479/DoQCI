@@ -3,3 +3,14 @@
 ################################################################################
 
 /DoQCI/Storage/Temp/5714b9a2-ea70-46ce-86fc-d872bbdb79b2.pdf
+DoQCI/obj/
+DoQCI/bin/
+.vs/
+DoQCI.slnx
+DoQCI/Storage/
+DoQCI/obj/
+pdf-tools-service/__pycache__
+pdf-tools-service/temp
+pdf-tools-service/venv
+pdf-tools-service/services/__pycache__
+**/obj/
