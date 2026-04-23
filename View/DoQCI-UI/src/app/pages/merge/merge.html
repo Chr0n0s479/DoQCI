@@ -1,16 +1,38 @@
-    <div class="flex flex-col items-center justify-center py-20">
-        <p class="text-7xl font-bold mb-6">
-            Unir Archivos Pdf
-        </p>
+<div class="flex flex-col items-center justify-center py-20">
 
-        <p class="text-2xl font-semibold mb-5">
-            ¡Une archivos PDF y reordenalos como quieras!
-        </p>
-        <app-file-uploader 
-        [multiple]="true"
-        [accept]="'.pdf'"
-        (filesSelected)="onFilesSelected($event)">
-        </app-file-uploader>
+    <p class="text-7xl font-bold mb-6">
+        Unir Archivos Pdf
+    </p>
+
+    <p class="text-2xl font-semibold mb-5">
+        ¡Une archivos PDF y reordenalos como quieras!
+    </p>
+
+    <!-- FILE UPLOADER -->
+    <app-file-uploader
+    [multiple]="true"
+    [accept]="'.pdf'"
+    (uploadStarted)="onUploadStarted()"
+    (uploadFinished)="onFilesSelected($event)"
+    [class.hidden]="isLoading || job">
+    </app-file-uploader>
 
 
-    </div>
+    @if (isLoading) {
+        
+        <div class="mt-10">
+            <p class="text-lg">Procesando archivos...</p>
+        </div>
+    }
+
+    <!-- LOADING -->
+
+
+    <!-- WORK AREA -->
+    @if (job) {
+    <app-work-area
+        [job]="job!">
+    </app-work-area>
+}
+
+</div>
