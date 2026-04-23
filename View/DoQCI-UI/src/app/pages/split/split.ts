@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { FileUploader } from '../../components/file-uploader/file-uploader';
-
 @Component({
-  selector: 'app-merge',
+  selector: 'app-split',
   imports: [FileUploader],
-  templateUrl: './merge.html',
+  templateUrl: './split.html',
 })
-export class Merge {
+export class Split {
   files: File[] = [];
-  onFilesSelected(files: File[]) {
-    this.files = files;
-  }
+onFilesSelected(files: File[]) {
+  this.files = files;
+}
 }

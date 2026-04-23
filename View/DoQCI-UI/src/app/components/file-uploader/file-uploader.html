@@ -1,11 +1,10 @@
-   <label
-      for="File"
-      class="mt-6 mx-auto block max-w-xl cursor-pointer rounded-2xl border-2 border-dashed border-gray-300 bg-white p-12 shadow-lg hover:shadow-xl transition hover:border-blue-500 hover:bg-blue-50">
+<label for="File"
+    class="mt-6 mx-auto block max-w-xl cursor-pointer rounded-2xl border-3 border-dashed border-gray-300 bg-gray-001 p-12 shadow-lg hover:shadow-xl transition hover:border-blue-500 hover:bg-blue-50">
 
-      <div class="flex items-center justify-center gap-6">
+    <div class="flex items-center justify-center gap-6">
 
         <!-- Icon -->
-       <svg class="w-12 h-12 text-gray-500 flex-shrink-0 mr-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+        <svg class="w-12 h-12 text-gray-500 flex-shrink-0 mr-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
             fill="#000000">
             <g id="SVGRepo_bgCarrier" stroke-width="1.5"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -20,18 +19,19 @@
         <!-- Text -->
         <div class="text-left">
 
-          <p class="text-2xl font-semibold text-gray-800">
-            Arrastra tu PDF aquí
-          </p>
+            <p class="text-2xl font-semibold text-gray-800">
+                Arrastra tu PDF aquí
+            </p>
 
-          <p class="text-gray-500">
-            o haz click para subir archivos
-          </p>
+            <p class="text-gray-500">
+                o haz click para subir archivos
+            </p>
 
         </div>
 
-      </div>
+    </div>
 
-      <input multiple type="file" accept=".pdf" id="File" class="sr-only">
+    <input [multiple]="multiple" type="file" [accept]="accept" id="File" class="sr-only"
+        (change)="onFileSelected($event)">
 
-    </label>
+</label>

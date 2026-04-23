@@ -1,15 +1,12 @@
     <div class="flex flex-col items-center justify-center py-20">
         <p class="text-7xl font-bold mb-6">
-            Unir Archivos Pdf
+            Divide un archivo Pdf
         </p>
 
         <p class="text-2xl font-semibold mb-5">
-            ¡Une archivos PDF y reordenalos como quieras!
+            ¡Divide archivos PDF!
         </p>
-        <app-file-uploader 
-        [multiple]="true"
-        [accept]="'.pdf'"
-        (filesSelected)="onFilesSelected($event)">
+        <app-file-uploader (filesSelected)="onFilesSelected($event)">
         </app-file-uploader>
 
 

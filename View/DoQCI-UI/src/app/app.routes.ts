@@ -13,6 +13,10 @@ export const routes: Routes = [
             {
                 path: 'merge',
                 loadComponent: () => import('./pages/merge/merge').then(m => m.Merge)
+            },
+            {
+                path: 'split',
+                loadComponent: () => import('./pages/split/split').then(m => m.Split)
             }
         ]
     }
