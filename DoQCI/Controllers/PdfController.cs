@@ -22,12 +22,27 @@ public class PdfController : ControllerBase
     [RequestSizeLimit(15728640)]
     public async Task<IActionResult> Upload([FromForm] FileUploadRequest request)
     {
-        if (request.File == null || request.File.Length == 0)
-            return BadRequest("File is required");
+        if (request.Files == null || request.Files.Count == 0)
+            return BadRequest("Files are required");
 
-        var result = await _pdfService.UploadAsync(request.File);
+        var results = new List<FileInfoResponse>();
 
-        return Ok(result);
+        var jobId = Guid.NewGuid().ToString();
+
+        int index = 0;
+        foreach (var file in request.Files)
+        {
+            var result = await _pdfService.UploadAsync(file, jobId, index);
+            result.Pages = await _pdfService.GenerateThumbnails(jobId, index);
+            results.Add(result);
+            index++;
+        }
+
+        return Ok(new UploadJobResponse(){
+            JobId = jobId,
+            Files = results
+        });
+
     }
 
     [HttpPost("reorder")]
@@ -45,8 +60,8 @@ public class PdfController : ControllerBase
             PageOrder = request.PageOrder
         };
 
-        var result = await _pdfService.ReorderAsync(reorderDto);
-
+        //var result = await _pdfService.ReorderAsync(reorderDto);
+        var result = new object();
         return Ok(result);
     }
 
@@ -57,8 +72,9 @@ public class PdfController : ControllerBase
         if (request.Files == null || request.Files.Count < 2)
             return BadRequest("At least two files are required");
 
-        var response = await _pdfService.UploadMergeAsync(request);
+        //var response = await _pdfService.UploadMergeAsync(request);
 
+        var response = new object();
         return Ok(response);
     }
 
@@ -82,7 +98,6 @@ public class PdfController : ControllerBase
             Pages = request.Pages
         };
         var response = await _pdfService.MergeAsync(mergeDto);
-        // Call service to perform merge based on the provided page order
         return Ok(response);
     }
 

@@ -6,11 +6,12 @@ namespace DoQCI.Services;
 
 public interface IPdfService
 {
-    Task<FileUploadResponse> UploadAsync(IFormFile file);
-    Task<FileUploadResponse> ReorderAsync(ReorderPdfRequest reorderRequest);
+    Task<FileInfoResponse> UploadAsync(IFormFile file, string jobId, int index);
+    //Task<FileInfoResponse> ReorderAsync(ReorderPdfRequest reorderRequest);
     Task<int> CountPages(string filePath);
-    Task<MergeUploadResponse> UploadMergeAsync(MergeUploadRequest request);
+    //Task<MergeUploadResponse> UploadMergeAsync(MergeUploadRequest request);
     Task<FileDownloadResponse> MergeAsync(MergeRequest mergeRequest);
+    Task<List<PageInfoResponse>> GenerateThumbnails(string jobId, int index);
 }
 
 

@@ -1,0 +1,37 @@
+<label for="File"
+    class="mt-6 mx-auto block max-w-xl cursor-pointer rounded-2xl border-3 border-dashed border-gray-300 bg-gray-001 p-12 shadow-lg hover:shadow-xl transition hover:border-blue-500 hover:bg-blue-50">
+
+    <div class="flex items-center justify-center gap-6">
+
+        <!-- Icon -->
+        <svg class="w-12 h-12 text-gray-500 flex-shrink-0 mr-7" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+            fill="#000000">
+            <g id="SVGRepo_bgCarrier" stroke-width="1.5"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <g>
+                    <path fill="none" d="M0 0h24v24H0z"></path>
+                    <path d="M4 19h16v-7h2v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-8h2v7zM14 9v6h-4V9H5l7-7 7 7h-5z"></path>
+                </g>
+            </g>
+        </svg>
+
+        <!-- Text -->
+        <div class="text-left">
+
+            <p class="text-2xl font-semibold text-gray-800">
+                Arrastra tu PDF aquí
+            </p>
+
+            <p class="text-gray-500">
+                o haz click para subir archivos
+            </p>
+
+        </div>
+
+    </div>
+
+    <input [multiple]="multiple" type="file" [accept]="accept" id="File" class="sr-only"
+        (change)="onFileSelected($event)">
+
+</label>

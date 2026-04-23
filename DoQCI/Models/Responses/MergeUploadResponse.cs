@@ -8,9 +8,3 @@ public class MergeUploadResponse
     public List<FileInfoResponse> Files { get; set; } = new();
 }
 
-public class FileInfoResponse
-{
-    public string FileName { get; set; } = String.Empty;
-
-    public int PageCount { get; set; }
-}
