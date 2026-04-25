@@ -51,6 +51,125 @@ public class PdfService : IPdfService
             PagesCount = pageCount
         };
     }
+
+    public Task<FileDownloadResponse> ProcessAsync(ProcessFileRequest fileRequest)
+    {
+        var jobPath = Path.Combine(JobsFolder, fileRequest.JobId);
+
+        if (!Directory.Exists(jobPath))
+            throw new Exception("Job folder not found");
+
+        var filesPath = Path.Combine(jobPath, "files");
+
+
+        var output = new PdfDocument();
+
+        var pdfCache = new Dictionary<int, PdfDocument>();
+
+        foreach (var page in fileRequest.Pages)
+        {
+            var filePath = Path.Combine(filesPath, $"file_{page.FileIndex}.pdf");
+
+            if (!File.Exists(filePath))
+                throw new Exception($"File not found: {filePath}");
+
+            if (!pdfCache.TryGetValue(page.FileIndex, out var sourcePdf))
+            {
+                sourcePdf = PdfReader.Open(filePath, PdfDocumentOpenMode.Import);
+                pdfCache[page.FileIndex] = sourcePdf;
+            }
+
+            var importedPage = sourcePdf.Pages[page.PageNumber - 1];
+            output.AddPage(importedPage);
+        }
+
+        var outputFileName = $"processed_{fileRequest.JobId}.pdf";
+        var outputPath = Path.Combine(jobPath, outputFileName);
+
+        output.Save(outputPath);
+        output.Close();
+
+        foreach (var pdf in pdfCache.Values)
+            pdf.Close();
+
+        ExecuteProcessOptions(fileRequest, outputPath);
+
+        return Task.FromResult(new FileDownloadResponse
+        {
+            FileName = outputFileName,
+            Path = outputPath
+        });
+    }
+
+    public void ExecuteProcessOptions(ProcessFileRequest fileRequest, string filePath)
+    {
+        var enabledOptions = fileRequest.Options
+            .GetType()
+            .GetProperties()
+            .Where(p => (bool)p.GetValue(fileRequest.Options))
+            .Select(p => p.Name);
+
+        foreach (var option in enabledOptions)
+        {
+            switch (option)
+            {
+                case "compress":
+                    Compress(fileRequest.JobId, filePath);
+                    break;
+
+                case "enhance":
+                    Enhance(fileRequest.JobId, filePath);
+                    break;
+
+                case "ocr":
+                    RunOcr(fileRequest.JobId, filePath);
+                    break;
+            }
+        }
+        // Implement other options like scaling, cropping, etc. as needed
+    }
+
+   private void Compress(string jobId, string filePath)
+   {
+        var url = $"{_python.BaseUrl}/compress";
+
+        var body = new
+        {
+            jobId = jobId,
+            filePath = filePath
+        };
+
+        var response = _httpClient.PostAsJsonAsync(url, body);
+    }
+
+    private void Enhance(string jobId, string filePath)
+    {
+
+        var url = $"{_python.BaseUrl}/enhance";
+
+        var body = new
+        {
+            jobId = jobId,
+            filePath = filePath
+        };
+
+        var response = _httpClient.PostAsJsonAsync(url, body);
+    }
+
+    private void RunOcr(string jobId, string filePath)
+    {
+
+        var url = $"{_python.BaseUrl}/ocr";
+
+        var body = new
+        {
+            jobId = jobId,
+            filePath = filePath
+        };
+
+        var response = _httpClient.PostAsJsonAsync(url, body);
+    }
+
     public async Task<List<PageInfoResponse>> GenerateThumbnails(string jobId, int index)
     {
         var url = $"{_python.BaseUrl}/generate-thumbnails";

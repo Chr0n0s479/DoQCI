@@ -19,5 +19,4 @@ def compress_pdf(input_path: str, output_path: str):
 
     result = subprocess.run(command, capture_output=True)
 
-    if result.returncode != 0:
-        raise Exception(result.stderr.decode())
+    return result.returncode == 0

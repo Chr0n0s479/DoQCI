@@ -20,6 +20,9 @@ class ThumbnailRequest(BaseModel):
     jobId: str
     fileIndex: int
 
+class FileProcessRequest(BaseModel):
+    jobId: str
+    filePath: str
 
 @app.get("/health")
 async def health():
@@ -27,24 +30,26 @@ async def health():
 
 
 @app.post("/compress")
-async def compress(file: UploadFile = File(...)):
-    input_name = f"{uuid.uuid4()}.pdf"
-    output_name = f"{uuid.uuid4()}_compressed.pdf"
+async def compress(request: FileProcessRequest):
+   
+    pdf_path = os.path.join(
+            STORAGE_ROOT,
+            "temp",
+            "jobs",
+            request.jobId,
+            f"processed_{request.jobId}.pdf"
+        )
+    pdf_out_path = os.path.join(
+            STORAGE_ROOT,
+            "temp",
+            "jobs",
+            request.jobId,
+            f"_processed_{request.jobId}.pdf"
+        )
 
-    input_path = os.path.join(TEMP_FOLDER, input_name)
-    output_path = os.path.join(TEMP_FOLDER, output_name)
+    result = compress_pdf(pdf_path, pdf_out_path)
 
-    with open(input_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    compress_pdf(input_path, output_path)
-
-    return FileResponse(
-        path=output_path,
-        media_type="application/pdf",
-        filename="compressed.pdf"
-    )
-
+    return result
 
 @app.post("/generate-thumbnails")
 async def generate_thumbnails_endpoint(request: ThumbnailRequest):

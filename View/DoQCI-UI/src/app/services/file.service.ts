@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { UploadJobResponse } from '../models/upload-job-response'
+import { ProcessFile } from '../models/process-file'
+import { environment } from '../../environment/environment'
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileService {
 
-  private apiUrl = 'https://localhost:7103/api/pdf'
 
   constructor(private http: HttpClient) {}
 
@@ -21,8 +22,15 @@ export class FileService {
     })
 
     return this.http.post<UploadJobResponse>(
-      `${this.apiUrl}/upload`,
+      `${environment.apiPdf}/upload`,
       formData
+    )
+  }
+
+  process(fileInfo: ProcessFile): Observable<string>{
+    return this.http.post<string>(
+    `${environment.apiPdf}/process`,
+    fileInfo
     )
   }
 

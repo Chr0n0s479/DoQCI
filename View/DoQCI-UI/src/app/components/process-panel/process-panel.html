@@ -1,0 +1,62 @@
+<div class="w-full mt-10 p-8 rounded-2xl bg-white/70 backdrop-blur-md shadow-lg border border-white/40">
+
+  <div class="flex justify-center gap-8">
+
+    <!-- Compress -->
+    <label
+      class="bg-white rounded-lg shadow p-4 flex flex-col items-center justify-center w-36 cursor-pointer hover:shadow-md transition"
+    >
+      <input
+        type="checkbox"
+        [(ngModel)]="compress"
+        class="w-5 h-5 mb-3"
+      />
+
+      <span class="text-sm font-medium text-gray-700 text-center">
+        Comprimir
+      </span>
+    </label>
+
+    <!-- Enhance -->
+    <label
+      class="bg-white rounded-lg shadow p-4 flex flex-col items-center justify-center w-36 cursor-pointer hover:shadow-md transition"
+    >
+      <input
+        type="checkbox"
+        [(ngModel)]="enhance"
+        class="w-5 h-5 mb-3"
+      />
+
+      <span class="text-sm font-medium text-gray-700 text-center">
+        Mejorar calidad
+      </span>
+    </label>
+
+    <!-- OCR -->
+    <label
+      class="bg-white rounded-lg shadow p-4 flex flex-col items-center justify-center w-36 cursor-pointer hover:shadow-md transition"
+    >
+      <input
+        type="checkbox"
+        [(ngModel)]="ocr"
+        class="w-5 h-5 mb-3"
+      />
+
+      <span class="text-sm font-medium text-gray-700 text-center">
+        OCR
+      </span>
+    </label>
+
+  </div>
+
+
+  <div class="flex justify-center mt-8">
+    <button
+      (click)="onProcess()"
+      class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 transition"
+    >
+      Procesar PDF
+    </button>
+  </div>
+
+</div>

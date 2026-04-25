@@ -12,6 +12,7 @@ public interface IPdfService
     //Task<MergeUploadResponse> UploadMergeAsync(MergeUploadRequest request);
     Task<FileDownloadResponse> MergeAsync(MergeRequest mergeRequest);
     Task<List<PageInfoResponse>> GenerateThumbnails(string jobId, int index);
+    Task<FileDownloadResponse> ProcessAsync(ProcessFileRequest fileRequest);
 }
 
 

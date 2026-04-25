@@ -19,7 +19,7 @@ public class PdfController : ControllerBase
     }
 
     [HttpPost("upload")]
-    [RequestSizeLimit(15728640)]
+    [RequestSizeLimit(25728640)]
     public async Task<IActionResult> Upload([FromForm] FileUploadRequest request)
     {
         if (request.Files == null || request.Files.Count == 0)
@@ -43,6 +43,14 @@ public class PdfController : ControllerBase
             Files = results
         });
 
+    }
+    [HttpPost("process")]
+    public async Task<IActionResult> Process([FromBody] ProcessFileRequest request)
+    {
+        if (string.IsNullOrEmpty(request.JobId))
+            return BadRequest("JobId is required");
+        var result = await _pdfService.ProcessAsync(request);
+        return Ok(result);
     }
 
     [HttpPost("reorder")]
