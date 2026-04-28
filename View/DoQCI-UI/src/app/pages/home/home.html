@@ -1,37 +1,43 @@
 <div class="flex flex-col items-center justify-center py-20">
 
-    <p class="text-7xl font-bold mb-6">
-        Procesa Archivos Pdf
-    </p>
+  <p class="text-7xl font-bold mb-6">
+    Procesa Archivos Pdf
+  </p>
 
-    <p class="text-2xl font-semibold mb-5">
-        ¡Une, Separa y Reordena archivos PDF como quieras!
-    </p>
+  <p class="text-2xl font-semibold mb-5">
+    ¡Une, Separa y Reordena archivos PDF como quieras!
+  </p>
 
-    <!-- FILE UPLOADER -->
-    <app-file-uploader [multiple]="true" [accept]="'.pdf'" (uploadStarted)="onUploadStarted()"
-        (uploadFinished)="onFilesSelected($event)" [class.hidden]="isLoading || job">
-    </app-file-uploader>
+  <!-- FILE UPLOADER -->
+  <app-file-uploader
+    [multiple]="true"
+    [accept]="'.pdf'"
+    (uploadStarted)="onUploadStarted()"
+    (uploadFinished)="onFilesSelected($event)"
+    [class.hidden]="isLoading || isProcessing || job">
+  </app-file-uploader>
 
+  @if (isLoading) {
 
-    @if (isLoading) {
+    <app-loading-spinner message="Subiendo Archivo(s)..."></app-loading-spinner>
 
-    <div class="mt-10">
-        <p class="text-lg">Procesando archivos...</p>
-    </div>
-    }
+  }
+  @else if (isProcessing) {
 
-    <!-- LOADING -->
+    <app-loading-spinner message="Procesando..."></app-loading-spinner>
 
+  }
 
+  <!-- WORK AREA -->
+  @if (job) {
 
-    <!-- WORK AREA -->
-    @if (job) {
-    <app-process-panel (process)="onProcess($event)">
-    </app-process-panel>
+    <app-process-panel (process)="onProcess($event)"></app-process-panel>
 
-    <app-work-area [job]="job!" (pagesChanged)="onPagesChanged($event)">
+    <app-work-area
+      [job]="job!"
+      (pagesChanged)="onPagesChanged($event)">
     </app-work-area>
-    }
+
+  }
 
 </div>

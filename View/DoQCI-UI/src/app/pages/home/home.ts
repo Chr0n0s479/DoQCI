@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FileUploader } from '../../components/file-uploader/file-uploader';
 import { UploadJobResponse } from '../../models/upload-job-response';
 import { WorkArea } from '../../components/work-area/work-area';
@@ -6,16 +6,19 @@ import { ProcessPanel } from '../../components/process-panel/process-panel';
 import { ProcessOptions } from '../../models/process-options';
 import { PageItem } from '../../models/page-item';
 import { FileService } from '../../services/file.service';
+import { LoadingSpinner } from "../../components/loading-spinner/loading-spinner";
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
-  imports: [FileUploader, WorkArea, ProcessPanel],
+  imports: [FileUploader, WorkArea, ProcessPanel, LoadingSpinner],
   templateUrl: './home.html',
 })
 export class Home {
 
   job?: UploadJobResponse
   isLoading = false
+  isProcessing = false
   pages: PageItem[] = []
 
   onPagesChanged(pages: PageItem[]) {
@@ -24,7 +27,9 @@ export class Home {
 
   }
 
-  constructor(private fileService: FileService) {}
+  constructor(private fileService: FileService, private cdr: ChangeDetectorRef) { 
+    
+  }
   onUploadStarted() {
     this.isLoading = true
   }
@@ -44,12 +49,9 @@ export class Home {
         fileIndex: p.fileIndex,
         pageNumber: p.pageNumber
       }))
-    if(this.job?.jobId == undefined)
-      return
-
-    if(pagesToProcess.length === 0)
-      return
-    
+    if (!this.job?.jobId || pagesToProcess.length === 0)
+      return;
+    this.isProcessing = true;
     const payload = {
 
       pages: pagesToProcess,
@@ -57,16 +59,25 @@ export class Home {
       jobId: this.job.jobId
 
     }
-    this.fileService.process(payload)  .subscribe({
-        
+
+    this.fileService.process(payload)
+      .pipe(
+        finalize(() =>{
+          this.isProcessing = false 
+          this.cdr.detectChanges();
+        }
+      )
+          
+      )
+      .subscribe({
+
         next: (res) => {
-
-         
-
           console.log(res)
         },
+
         error: err => console.error(err)
-      })
+
+      });
 
     console.log(payload)
 
