@@ -1,19 +1,37 @@
-<section class="bg-white py-20 ml-50 mr-50">
+<div class="flex flex-col items-center justify-center py-20">
 
-  <div class="max-w-5xl mx-auto px-6 text-center">
-
-    <!-- Title -->
-    <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-      Herramientas PDF simples y rápidas
-    </h1>
-
-    <!-- Subtitle -->
-    <p class="text-lg text-gray-600 dark:text-gray-400 mb-12">
-      Une, divide, reordena y comprime archivos PDF directamente en tu navegador.
+    <p class="text-7xl font-bold mb-6">
+        Procesa Archivos Pdf
     </p>
 
- 
+    <p class="text-2xl font-semibold mb-5">
+        ¡Une, Separa y Reordena archivos PDF como quieras!
+    </p>
 
-  </div>
+    <!-- FILE UPLOADER -->
+    <app-file-uploader [multiple]="true" [accept]="'.pdf'" (uploadStarted)="onUploadStarted()"
+        (uploadFinished)="onFilesSelected($event)" [class.hidden]="isLoading || job">
+    </app-file-uploader>
 
-</section>
+
+    @if (isLoading) {
+
+    <div class="mt-10">
+        <p class="text-lg">Procesando archivos...</p>
+    </div>
+    }
+
+    <!-- LOADING -->
+
+
+
+    <!-- WORK AREA -->
+    @if (job) {
+    <app-process-panel (process)="onProcess($event)">
+    </app-process-panel>
+
+    <app-work-area [job]="job!" (pagesChanged)="onPagesChanged($event)">
+    </app-work-area>
+    }
+
+</div>

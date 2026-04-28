@@ -11,12 +11,14 @@ import { PageItem } from '../../models/page-item';
   templateUrl: './work-area.html',
 })
 export class WorkArea implements OnInit {
-  
+
 
   @Input() job!: UploadJobResponse;
-  @Output() pagesChanged = new EventEmitter<PageItem[]>();  
+  @Output() pagesChanged = new EventEmitter<PageItem[]>();
 
   pages: PageItem[] = [];
+
+
 
   ngOnInit() {
     this.pages = this.job.files.flatMap(file =>
@@ -31,6 +33,12 @@ export class WorkArea implements OnInit {
     )
     this.pagesChanged.emit(this.pages)
   }
+
+  changeWholeSelection(enabled: boolean) {
+    this.pages.forEach(page => page.isEnabled = enabled)
+    this.pagesChanged.emit(this.pages)
+  }
+
   togglePage(page: any) {
     page.isEnabled = !page.isEnabled
     this.pagesChanged.emit(this.pages)
@@ -40,39 +48,39 @@ export class WorkArea implements OnInit {
     moveItemInArray(this.pages, event.previousIndex, event.currentIndex);
     this.pagesChanged.emit(this.pages)
   }
-  
+
   // work-area.ts
-fileColors: Record<number, { border: string; badge: string }> = {};
+  fileColors: Record<number, { border: string; badge: string }> = {};
 
-private tailwindPairs = [
-  { border: 'border-red-500',    badge: 'bg-red-500' },
-  { border: 'border-blue-500',   badge: 'bg-blue-500' },
-  { border: 'border-green-500',  badge: 'bg-green-500' },
-  { border: 'border-purple-500', badge: 'bg-purple-500' },
-  { border: 'border-orange-500', badge: 'bg-orange-500' },
-  { border: 'border-pink-500',   badge: 'bg-pink-500' },
-  { border: 'border-teal-500',   badge: 'bg-teal-500' },
-  { border: 'border-yellow-500', badge: 'bg-yellow-500' },
-  { border: 'border-indigo-500', badge: 'bg-indigo-500' },
-  { border: 'border-cyan-500',   badge: 'bg-cyan-500' }
-];
+  private tailwindPairs = [
+    { border: 'border-red-500', badge: 'bg-red-500' },
+    { border: 'border-blue-500', badge: 'bg-blue-500' },
+    { border: 'border-green-500', badge: 'bg-green-500' },
+    { border: 'border-purple-500', badge: 'bg-purple-500' },
+    { border: 'border-orange-500', badge: 'bg-orange-500' },
+    { border: 'border-pink-500', badge: 'bg-pink-500' },
+    { border: 'border-teal-500', badge: 'bg-teal-500' },
+    { border: 'border-yellow-500', badge: 'bg-yellow-500' },
+    { border: 'border-indigo-500', badge: 'bg-indigo-500' },
+    { border: 'border-cyan-500', badge: 'bg-cyan-500' }
+  ];
 
-private getRandomPair() {
-  const i = Math.floor(Math.random() * this.tailwindPairs.length);
-  return this.tailwindPairs[i];
-}
-
-getFileColor(fileIndex: number) {
-  if (!this.fileColors[fileIndex]) {
-    this.fileColors[fileIndex] = this.getRandomPair();
+  private getRandomPair() {
+    const i = Math.floor(Math.random() * this.tailwindPairs.length);
+    return this.tailwindPairs[i];
   }
-  return this.fileColors[fileIndex].border;
-}
 
-getBadgeColor(fileIndex: number) {
-  if (!this.fileColors[fileIndex]) {
-    this.fileColors[fileIndex] = this.getRandomPair();
+  getFileColor(fileIndex: number) {
+    if (!this.fileColors[fileIndex]) {
+      this.fileColors[fileIndex] = this.getRandomPair();
+    }
+    return this.fileColors[fileIndex].border;
   }
-  return this.fileColors[fileIndex].badge;
-}
+
+  getBadgeColor(fileIndex: number) {
+    if (!this.fileColors[fileIndex]) {
+      this.fileColors[fileIndex] = this.getRandomPair();
+    }
+    return this.fileColors[fileIndex].badge;
+  }
 }
