@@ -9,35 +9,33 @@
   </p>
 
   <!-- FILE UPLOADER -->
-  <app-file-uploader
-    [multiple]="true"
-    [accept]="'.pdf'"
-    (uploadStarted)="onUploadStarted()"
-    (uploadFinished)="onFilesSelected($event)"
-    [class.hidden]="isLoading || isProcessing || job">
+  <app-file-uploader [multiple]="true" [accept]="'.pdf'" (uploadStarted)="onUploadStarted()"
+    (uploadFinished)="onFilesSelected($event)" [class.hidden]="isLoading || isProcessing || job">
   </app-file-uploader>
 
   @if (isLoading) {
 
-    <app-loading-spinner message="Subiendo Archivo(s)..."></app-loading-spinner>
+  <app-loading-spinner message="Subiendo Archivo(s)..."></app-loading-spinner>
 
   }
   @else if (isProcessing) {
 
-    <app-loading-spinner message="Procesando..."></app-loading-spinner>
+  <app-loading-spinner message="Procesando..."></app-loading-spinner>
 
+  } @else if(downloadFile){
+  <app-download-section [fileName]="downloadFile.fileName" [path]="downloadFile.path" (reset)="resetApp()">
+  </app-download-section>
   }
 
   <!-- WORK AREA -->
   @if (job) {
 
-    <app-process-panel (process)="onProcess($event)"></app-process-panel>
+  <app-process-panel (process)="onProcess($event)"></app-process-panel>
 
-    <app-work-area
-      [job]="job!"
-      (pagesChanged)="onPagesChanged($event)">
-    </app-work-area>
+  <app-work-area [job]="job!" (pagesChanged)="onPagesChanged($event)">
+  </app-work-area>
 
   }
+
 
 </div>

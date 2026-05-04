@@ -4,6 +4,7 @@ import { Observable } from 'rxjs'
 import { UploadJobResponse } from '../models/upload-job-response'
 import { ProcessFile } from '../models/process-file'
 import { environment } from '../../environment/environment'
+import { FileResponse } from '../models/file-response'
 
 @Injectable({
   providedIn: 'root',
@@ -27,8 +28,8 @@ export class FileService {
     )
   }
 
-  process(fileInfo: ProcessFile): Observable<string>{
-    return this.http.post<string>(
+  process(fileInfo: ProcessFile): Observable<FileResponse>{
+    return this.http.post<FileResponse>(
     `${environment.apiPdf}/process`,
     fileInfo
     )

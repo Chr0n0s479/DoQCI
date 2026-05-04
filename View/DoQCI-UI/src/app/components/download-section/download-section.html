@@ -1,0 +1,35 @@
+<div class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
+
+  <div class="bg-white rounded-2xl shadow-xl p-8 w-[400px] text-center">
+
+    <div class="mb-4 text-green-500 text-4xl">
+      ✔
+    </div>
+
+    <p class="text-lg font-semibold mb-2">
+      Archivo listo
+    </p>
+
+    <p class="text-sm text-gray-500 mb-6">
+      {{fileName}}
+    </p>
+
+    <div class="flex gap-4 justify-center">
+
+      <button
+        (click)="download()"
+        class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        Descargar
+      </button>
+
+      <button
+        (click)="processAnother()"
+        class="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+        Otro archivo
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

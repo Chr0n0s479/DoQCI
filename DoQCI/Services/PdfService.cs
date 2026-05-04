@@ -94,10 +94,15 @@ public class PdfService : IPdfService
 
         ExecuteProcessOptions(fileRequest, outputPath);
 
+        var relativePath = Path.GetRelativePath(_storage.RootPath, outputPath)
+                            .Replace("\\", "/");
+
+        var url = $"/storage/{relativePath}";
+
         return Task.FromResult(new FileDownloadResponse
         {
             FileName = outputFileName,
-            Path = outputPath
+            Path = url
         });
     }
 
