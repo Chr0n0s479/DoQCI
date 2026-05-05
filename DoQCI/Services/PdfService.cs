@@ -4,6 +4,7 @@ using DoQCI.Configuration;
 using DoQCI.Helpers;
 using DoQCI.Models.Requests;
 using DoQCI.Models.Responses;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.Extensions.Options;
 using PdfSharpCore.Pdf;
@@ -50,6 +51,18 @@ public class PdfService : IPdfService
             FileName = fileName,
             PagesCount = pageCount
         };
+    }
+
+    public string GetDownloadFile(string path)
+    {
+     
+        var fullPath = Path.Combine(_storage.RootPath, path);
+
+        if (!System.IO.File.Exists(fullPath))
+            return String.Empty;
+
+        return fullPath;
+ 
     }
 
     public Task<FileDownloadResponse> ProcessAsync(ProcessFileRequest fileRequest)

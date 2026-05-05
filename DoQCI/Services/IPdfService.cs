@@ -13,6 +13,7 @@ public interface IPdfService
     Task<FileDownloadResponse> MergeAsync(MergeRequest mergeRequest);
     Task<List<PageInfoResponse>> GenerateThumbnails(string jobId, int index);
     Task<FileDownloadResponse> ProcessAsync(ProcessFileRequest fileRequest);
+    string GetDownloadFile(string path);
 }
 
 

@@ -53,6 +53,21 @@ public class PdfController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("download")]
+    public IActionResult Download([FromQuery] string path)
+    {
+        var fullPath = _pdfService.GetDownloadFile(path);
+
+        if (fullPath == String.Empty)
+            return NotFound();
+
+        return PhysicalFile(
+            fullPath,
+            "application/pdf",
+            $"DoQCI_Processed_{DateTime.Now:HHmmss}.pdf" 
+        );
+    }
+
     [HttpPost("reorder")]
     public async Task<IActionResult> Reorder([FromBody] ReorderPdfRequest request)
     {

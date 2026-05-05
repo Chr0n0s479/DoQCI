@@ -14,15 +14,12 @@ export class DownloadSection {
   @Output() reset = new EventEmitter<void>()
 
   download() {
-  const link = document.createElement('a')
-
-  link.href = environment.storageUrl + this.path
-  link.download = 'DoQCI_processed_file.pdf'   
-
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
+    console.log(`${environment.apiPdf}/download?path=${this.path.replace('/storage/', '')}`)
+    window.open(
+      `${environment.apiPdf}/download?path=${this.path.replace('/storage/', '')}`,
+      "_blank"
+    )
+  }
 
   processAnother() {
     this.reset.emit()
