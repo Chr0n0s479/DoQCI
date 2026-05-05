@@ -11,18 +11,21 @@ export class DownloadSection {
   @Input() fileName!: string
   @Input() path!: string
 
-  @Output() reset = new EventEmitter<void>()
+  @Output() reset = new EventEmitter<void>()       
+  @Output() close = new EventEmitter<void>()       
 
   download() {
-    console.log(`${environment.apiPdf}/download?path=${this.path.replace('/storage/', '')}`)
     window.open(
       `${environment.apiPdf}/download?path=${this.path.replace('/storage/', '')}`,
       "_blank"
     )
   }
 
-  processAnother() {
-    this.reset.emit()
+  continueProcessing() {
+    this.close.emit()   
   }
 
+  processAnother() {
+    this.reset.emit()  
+  }
 }

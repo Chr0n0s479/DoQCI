@@ -96,4 +96,8 @@ export class Home {
     this.isProcessing = false
     this.isLoading = false
   }
+
+  onContinueProcessing() {
+  this.downloadFile = undefined; 
+}
 }

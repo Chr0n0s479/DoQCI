@@ -1,35 +1,75 @@
 <div class="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
 
-  <div class="bg-white rounded-2xl shadow-xl p-8 w-[400px] text-center">
+    <div class="bg-white rounded-3xl shadow-2xl p-10 w-[720px] text-center">
 
-    <div class="mb-4 text-green-500 text-4xl">
-      ✔
+        <div class="flex flex-col items-center mb-6">
+
+            <!-- círculo -->
+            <div class="w-40 h-40 rounded-full bg-green-100 flex items-center justify-center mb-4 shadow-inner">
+
+                <!-- check SVG -->
+                <svg class="w-20 h-20 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="3">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+
+            </div>
+
+            <!-- título -->
+            <p class="text-4xl mb-3 font-bold text-gray-800">
+                ¡Archivo listo!
+            </p>
+
+            <!-- subtítulo -->
+            <p class="text-xl text-gray-500 mt-2 mb-3">
+                Tu PDF ha sido procesado correctamente
+            </p>
+
+        </div>
+
+        <div class="flex flex-col gap-4 items-center">
+
+            <!-- DESCARGAR -->
+            <button (click)="download()"
+                class="w-2/3 py-3 bg-blue-600 text-white text-xl font-semibold rounded-xl shadow-md hover:bg-blue-700 transition flex items-center justify-center gap-3">
+
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                        d="M12 16.75c-.21 0-.41-.09-.55-.24l-4-4.38a.75.75 0 0 1 1.11-1.01L11.25 14.07V3a.75.75 0 0 1 1.5 0v11.07l2.69-2.95a.75.75 0 1 1 1.11 1.01l-4 4.38c-.14.15-.34.24-.55.24z" />
+                    <path
+                        d="M3 14.25a.75.75 0 0 1 .75.75v.05c0 1.43 0 2.44.1 3.19.1.73.28 1.12.56 1.39.28.28.67.46 1.4.56.75.1 1.76.1 3.19.1h6c1.43 0 2.44 0 3.19-.1.73-.1 1.12-.28 1.39-.56.28-.28.46-.67.56-1.4.1-.75.1-1.76.1-3.19V15a.75.75 0 1 1 1.5 0c0 1.45 0 2.55-.12 3.4-.12.9-.38 1.66-.98 2.26-.6.6-1.36.86-2.26.98-.85.12-1.95.12-3.4.12H9c-1.45 0-2.55 0-3.4-.12-.9-.12-1.66-.38-2.26-.98-.6-.6-.86-1.36-.98-2.26C2.25 17.55 2.25 16.45 2.25 15a.75.75 0 0 1 .75-.75z" />
+                </svg>
+
+                Descargar
+            </button>
+
+            <!-- CONTINUAR -->
+            <button (click)="continueProcessing()"
+                class="w-2/3 py-3 bg-gray-100 text-gray-700 font-medium text-xl rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-3">
+
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 7h2a6 6 0 1 1 0 12H8a6 6 0 1 1 0-12h2" />
+                    <path d="M7 4l3 3-3 3" />
+                </svg>
+
+                Seguir procesando
+            </button>
+
+            <!-- NUEVO -->
+            <button (click)="processAnother()"
+                class="w-2/3 py-3 bg-gray-200 text-gray-700 text-xl font-medium rounded-xl hover:bg-gray-300 transition flex items-center justify-center gap-3">
+
+                <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
+                    <path d="M15 3v5h5" />
+                    <path d="M12 9v6M9 12h6" />
+                </svg>
+
+                Procesar otro archivo
+            </button>
+
+        </div>
+
     </div>
-
-    <p class="text-lg font-semibold mb-2">
-      Archivo listo
-    </p>
-
-    <p class="text-sm text-gray-500 mb-6">
-      {{fileName}}
-    </p>
-
-    <div class="flex gap-4 justify-center">
-
-      <button
-        (click)="download()"
-        class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-        Descargar
-      </button>
-
-      <button
-        (click)="processAnother()"
-        class="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
-        Otro archivo
-      </button>
-
-    </div>
-
-  </div>
 
 </div>

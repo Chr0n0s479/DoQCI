@@ -64,7 +64,7 @@ public class PdfController : ControllerBase
         return PhysicalFile(
             fullPath,
             "application/pdf",
-            $"DoQCI_Processed_{DateTime.Now:HHmmss}.pdf" 
+            $"DoQCI_Processed_{DateTime.Now:HH_mm_ss}.pdf" 
         );
     }
 

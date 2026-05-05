@@ -23,7 +23,8 @@
   <app-loading-spinner message="Procesando..."></app-loading-spinner>
 
   } @else if(downloadFile){
-  <app-download-section [fileName]="downloadFile.fileName" [path]="downloadFile.path" (reset)="resetApp()">
+  <app-download-section [fileName]="downloadFile.fileName" [path]="downloadFile.path" (close)="onContinueProcessing()"
+    (reset)="resetApp()">
   </app-download-section>
   }
 
